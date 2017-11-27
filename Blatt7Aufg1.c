@@ -3,10 +3,14 @@
 
 int rec_fib(int n)
 {
-	if (n <= 1)
+	if (n <= 0) {
+		printf("Sorry, that's not how Fibonacci numbers work.\n");
+		exit(1);
+	} else if (n <= 2) {
 		return 1;
-	else
+	} else {
 		return rec_fib(n-1) + rec_fib(n-2);
+	}
 }
 
 int main(int argc, char *argv[])
