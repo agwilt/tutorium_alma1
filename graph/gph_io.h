@@ -30,4 +30,7 @@ int **read_matrix_file(const char *filename, int *n);
 void print_matrix(int **a, int n);
 void print_graph(struct graph *g);
 
+int **graph_to_adjmat(struct graph *g);
+struct graph *adjmat_to_graph(int **a, int n);
+
 #endif

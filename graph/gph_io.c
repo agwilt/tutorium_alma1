@@ -19,6 +19,7 @@ void add_edge(struct graph *g, int v1, int v2)
 	t->weight = 0.0;
 
 	g->nodes[v1-1] = t;
+	g->edge_count++;
 }
 
 struct graph *init(int size)
@@ -123,4 +124,38 @@ void print_graph(struct graph *g)
 			printf("%d %d\n", i+1, e->target);
 		}
 	}
+}
+
+int **graph_to_adjmat(struct graph *g)
+{
+	int n = g->node_count;
+	/* Initialise matrix to 0 */
+	int **a = malloc(n * sizeof(int *));
+	for (int i=0; i<n; ++i) a[i] = calloc(n, sizeof(int));
+
+	/* Fill matrix */
+	for (int v=1; v<=g->node_count; ++v) {
+		/* Go through all outgoing edges */
+		for (struct edge *e=g->nodes[v-1]; e!=NULL; e=e->next) {
+			a[v-1][e->target - 1]++;
+		}
+	}
+
+	return a;
+}
+
+struct graph *adjmat_to_graph(int **a, int n)
+{
+	struct graph *g = init(n);
+
+	for (int i=0; i<n; ++i) {
+		for (int j=0; j<n; ++j) {
+			for (int k=a[i][j]; k>0; --k) {
+				add_edge(g, i+1, j+1);
+			}
+			g->edge_count += a[i][j];
+		}
+	}
+
+	return g;
 }
