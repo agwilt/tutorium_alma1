@@ -27,4 +27,7 @@ int **init_matrix(int n);
 
 int **read_matrix_file(const char *filename, int *n);
 
+void print_matrix(int **a, int n);
+void print_graph(struct graph *g);
+
 #endif

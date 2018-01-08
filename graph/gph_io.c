@@ -103,3 +103,24 @@ int **read_matrix_file(const char *filename, int *n)
 
 	return mat;
 }
+
+void print_matrix(int **a, int n)
+{
+	for (int i=0; i<n; ++i) {
+		for (int j=0; j<n; ++j)
+			printf("%3d ", a[i][j]);
+		printf("\n");
+	}
+}
+
+void print_graph(struct graph *g)
+{
+	printf("%d\n", g->node_count);
+	printf("%d\n", g->edge_count);
+
+	for (int i=0; i<g->node_count; i++) {
+		for (struct edge *e = g->nodes[i]; e!=NULL; e=e->next) {
+			printf("%d %d\n", i+1, e->target);
+		}
+	}
+}
