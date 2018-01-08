@@ -19,13 +19,13 @@ void add_edge(struct graph *g, int v1, int v2)
 	t->weight = 0.0;
 
 	g->nodes[v1-1] = t;
-	g->edge_count++;
 }
 
 struct graph *init(int size)
 {
 	struct graph *g = malloc(sizeof(struct graph));
 	g->node_count = size;
+	g->edge_count = 0;
 	g->nodes = calloc(size, sizeof(struct edge *));
 	return g;
 }
