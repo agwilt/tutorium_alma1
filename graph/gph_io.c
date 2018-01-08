@@ -94,9 +94,10 @@ int **read_matrix_file(const char *filename, int *n)
 	int **mat = init_matrix(*n);
 
 	for (int i=0; i<*n; i++) {
-		for (int j = 0; j < *n; j++) {
-			assert(fscanf(fp, "%d", mat[i]+j) == 1);
+		for (int j = 0; j < *n-1; j++) {
+			assert(fscanf(fp, "%d,", mat[i]+j) == 1);
 		}
+		assert(fscanf(fp, "%d\n", mat[i]+*n-1) == 1);
 	}
 	fclose(fp);
 
