@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "gph_io.h"
 
@@ -13,6 +14,11 @@ int main(int argc, char *argv[])
 	printf("Graph:\n");
 	struct graph *g = adjmat_to_graph(A, n);
 	print_graph(g);
+
+	for (int i=0; i<n; ++i)
+		free(A[i]);
+	graph_free(g);
+	free(g);
 
 	return 0;
 }

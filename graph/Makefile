@@ -1,3 +1,6 @@
+free_test: free_test.c gph_io.c
+	gcc -Wall -pedantic -std=c11 free_test.c gph_io.c -o free_test
+
 test_read_graph: test_read_graph.c gph_io.c
 	gcc -Wall -pedantic -std=c11 test_read_graph.c gph_io.c -o test_read_graph
 

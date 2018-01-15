@@ -18,6 +18,7 @@ struct edge {
 void add_edge(struct graph *g, int v1, int v2);
 
 struct graph *init(int size);
+void graph_free(struct graph *g);
 
 struct graph *read_edges_file(const char *filename);
 
