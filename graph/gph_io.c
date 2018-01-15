@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <err.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -177,33 +178,38 @@ struct graph *adjmat_to_graph(int **a, int n)
 
 struct graph *tiefensuche(struct graph *g, int r)
 {
+	/* See if r is OK */
+	if (r <= 0 || r > g->node_count) err(1, "Error: Bad root\n");
 	/* Ausgabegraph t */
 	struct graph *t = init(g->node_count);
 
 	bool *visited = calloc(g->node_count, sizeof(bool));
 	int *stack = malloc(g->node_count * sizeof(int));
+	int *prev = malloc(g->node_count * sizeof(int));
 	/* Stack pointer, zeigt immer auf den ersten Platz, wo noch nicht etwas steht */
 	int *sp = stack;
 
 	/* Start with v */
-	visited[r-1] = true;
 	*sp = r;
 	sp++;
 
-	int v;
 	while(sp != stack) {
 		/* pop v from stack */
 		sp--;
-		v = *sp;
+		int v = *sp;
 
-		/* have a look aroud */
-		for (struct edge *e = g->nodes[v-1]; e != NULL; e=e->next) {
-			int w = e->target;
-			if (! visited[w - 1]) {
-				visited[w - 1] = true;
+		if (! visited[v-1]) {
+			if (v != r)
+				add_edge(t, prev[v-1], v);
+			visited[v-1] = true;
+			/* have a look aroud */
+			for (struct edge *e = g->nodes[v-1]; e != NULL; e=e->next) {
+				int w = e->target;
+				/* Push(w) */
 				*sp = w;
 				sp++;
-				add_edge(t, v, w);
+				prev[w-1] = v;
+				/* Add to tree */
 				t->edge_count++;
 			}
 		}
@@ -211,6 +217,7 @@ struct graph *tiefensuche(struct graph *g, int r)
 
 	free(visited);
 	free(stack);
+	free(prev);
 
 	return t;
 }
