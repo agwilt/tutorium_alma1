@@ -34,4 +34,6 @@ void print_graph(struct graph *g);
 int **graph_to_adjmat(struct graph *g);
 struct graph *adjmat_to_graph(int **a, int n);
 
+struct graph *tiefensuche(struct graph *g, int r);
+
 #endif

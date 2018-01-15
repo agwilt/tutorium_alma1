@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,6 +29,20 @@ struct graph *init(int size)
 	g->edge_count = 0;
 	g->nodes = calloc(size, sizeof(struct edge *));
 	return g;
+}
+
+void graph_free(struct graph *g)
+{
+	for (int i=0; i<g->node_count; ++i) {
+		struct edge *next_e;
+		for (struct edge *e = g->nodes[i]; e != NULL; e = next_e) {
+			next_e = e->next;
+			free(e);
+		}
+	}
+	free(g->nodes);
+	g->edge_count=0;
+	g->node_count=0;
 }
 
 struct graph *read_edges_file(const char *filename)
@@ -158,4 +173,44 @@ struct graph *adjmat_to_graph(int **a, int n)
 	}
 
 	return g;
+}
+
+struct graph *tiefensuche(struct graph *g, int r)
+{
+	/* Ausgabegraph t */
+	struct graph *t = init(g->node_count);
+
+	bool *visited = calloc(g->node_count, sizeof(bool));
+	int *stack = malloc(g->node_count * sizeof(int));
+	/* Stack pointer, zeigt immer auf den ersten Platz, wo noch nicht etwas steht */
+	int *sp = stack;
+
+	/* Start with v */
+	visited[r-1] = true;
+	*sp = r;
+	sp++;
+
+	int v;
+	while(sp != stack) {
+		/* pop v from stack */
+		sp--;
+		v = *sp;
+
+		/* have a look aroud */
+		for (struct edge *e = g->nodes[v-1]; e != NULL; e=e->next) {
+			int w = e->target;
+			if (! visited[w - 1]) {
+				visited[w - 1] = true;
+				*sp = w;
+				sp++;
+				add_edge(t, v, w);
+				t->edge_count++;
+			}
+		}
+	}
+
+	free(visited);
+	free(stack);
+
+	return t;
 }

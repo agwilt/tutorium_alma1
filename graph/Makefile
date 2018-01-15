@@ -1,3 +1,6 @@
+dfs: dfs.c gph_io.c
+	gcc -Wall -pedantic -std=c11 dfs.c gph_io.c -o dfs
+
 free_test: free_test.c gph_io.c
 	gcc -Wall -pedantic -std=c11 free_test.c gph_io.c -o free_test
 
