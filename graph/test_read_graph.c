@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 
 	for (int i=0; i<g->node_count; ++i)
 		free(a[i]);
+	free(a);
 	graph_free(g);
 	free(g);
 

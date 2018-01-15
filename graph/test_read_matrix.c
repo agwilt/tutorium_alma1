@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 
 	for (int i=0; i<n; ++i)
 		free(A[i]);
+	free(A);
 	graph_free(g);
 	free(g);
 
