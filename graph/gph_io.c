@@ -46,7 +46,7 @@ void graph_free(struct graph *g)
 	g->node_count=0;
 }
 
-struct graph *read_edges_file(const char *filename)
+struct graph *read_edges_file(const char *filename, bool gerichtet)
 {
 	int node_count, edge_count;
 
@@ -59,12 +59,18 @@ struct graph *read_edges_file(const char *filename)
 	struct graph *g = init(node_count);
 	/* Lese Anzahl Kante */
 	assert(fscanf(fp, "%d\n", &edge_count) == 1);
-	g->edge_count = edge_count;
+
+	if (gerichtet)
+		g->edge_count = edge_count;
+	else
+		g->edge_count = 2*edge_count;
 
 	for (int i=0; i<edge_count; ++i) {
 		int a, b;
 		assert(fscanf(fp, "%d %d\n", &a, &b) == 2);
 		add_edge(g, a, b);
+		if (!gerichtet)
+			add_edge(g, b, a);
 	}
 
 	fclose(fp);
@@ -225,4 +231,57 @@ struct graph *tiefensuche(struct graph *g, int r)
 	free(prev);
 
 	return t;
+}
+
+int ZHK(struct graph *g)
+{
+	/* See if r is OK */
+	int r=1;
+	int n_komp=0;
+	/* Ausgabegraph t */
+
+	bool *visited = calloc(g->node_count, sizeof(bool));
+	int *stack = malloc(g->node_count * sizeof(int));
+	/* Stack pointer, zeigt immer auf den ersten Platz, wo noch nicht etwas steht */
+	int *sp = stack;
+
+	while (r <= g->node_count) {
+		n_komp++;
+
+		/* Start with v */
+		*sp = r;
+		sp++;
+		visited[r-1] = true;
+		printf("%d", r);
+
+		/* While stack not empty */
+		while(sp != stack) {
+			/* pop v from stack */
+			sp--;
+			int v = *sp;
+
+			/* have a look aroud */
+			for (struct edge *e = g->nodes[v-1]; e != NULL; e=e->next) {
+				int w = e->target;
+				if (! visited[w-1]) {
+					visited[w-1] = true;
+					*sp = w;
+					sp++;
+					printf(", %d", w);
+				}
+			}
+		}
+
+		/* find new root */
+		while (r <= g->node_count) {
+			if (visited[r-1]) ++r;
+			else break;
+		}
+		printf("\n");
+	}
+
+	free(visited);
+	free(stack);
+
+	return n_komp;
 }

@@ -1,3 +1,6 @@
+zhk: zhk.c gph_io.c
+	gcc -Wall -pedantic -std=c11 zhk.c gph_io.c -o zhk
+
 dfs: dfs.c gph_io.c
 	gcc -Wall -pedantic -std=c11 dfs.c gph_io.c -o dfs
 

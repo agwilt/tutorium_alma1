@@ -1,6 +1,8 @@
 #ifndef _gph_io_h_
 #define _gph_io_h_
 
+#include <stdbool.h>
+
 struct graph {
 	/* Array von listen von Kanten */
 	struct edge **nodes;
@@ -20,7 +22,7 @@ void add_edge(struct graph *g, int v1, int v2);
 struct graph *init(int size);
 void graph_free(struct graph *g);
 
-struct graph *read_edges_file(const char *filename);
+struct graph *read_edges_file(const char *filename, bool gerichtet);
 
 void write_edges_file(const char *filename, struct graph *g);
 
@@ -35,5 +37,6 @@ int **graph_to_adjmat(struct graph *g);
 struct graph *adjmat_to_graph(int **a, int n);
 
 struct graph *tiefensuche(struct graph *g, int r);
+int ZHK(struct graph *g);
 
 #endif

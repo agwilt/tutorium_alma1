@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-	struct graph *g = read_edges_file(argv[1]);
+	struct graph *g = read_edges_file(argv[1], true);
 
 	printf("Graph:\n");
 	print_graph(g);

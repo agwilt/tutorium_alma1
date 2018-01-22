@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 	}
 
 	int r = atoi(argv[2]);
-	struct graph *g = read_edges_file(argv[1]);
+	struct graph *g = read_edges_file(argv[1], true);
 	struct graph *t = tiefensuche(g, r);
 
 	print_graph(t);
