@@ -193,24 +193,29 @@ struct graph *tiefensuche(struct graph *g, int r)
 	*sp = r;
 	sp++;
 
+	/* While stack not empty */
 	while(sp != stack) {
 		/* pop v from stack */
 		sp--;
 		int v = *sp;
 
+		/* If we haven't already visited v, do that */
 		if (! visited[v-1]) {
-			if (v != r)
-				add_edge(t, prev[v-1], v);
 			visited[v-1] = true;
+			/* Only add edge if we aren't at v=r */
+			if (v != r) {
+				add_edge(t, prev[v-1], v);
+				t->edge_count++;
+			}
+
 			/* have a look aroud */
 			for (struct edge *e = g->nodes[v-1]; e != NULL; e=e->next) {
 				int w = e->target;
 				/* Push(w) */
 				*sp = w;
 				sp++;
+				/* Remember how we got there */
 				prev[w-1] = v;
-				/* Add to tree */
-				t->edge_count++;
 			}
 		}
 	}
